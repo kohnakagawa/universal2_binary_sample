@@ -10,13 +10,13 @@ See the [official document](https://developer.apple.com/documentation/xcode/buil
 
 You should also switch Command Line Tools to Xcode beta.
 
-```
+```bash
 $ sudo xcode-select -s /Applications/Xcode-beta.app
 ```
 
 # How to build
 
-```
+```bash
 $ make
 ```
 
@@ -34,7 +34,7 @@ Fat Binary has the following structure.
 - Binary #0 (x86_x64)
 - Binary #1 (AArch64)
 
-```
+```c
 // include/mach-o/fat.h
 
 #define FAT_MAGIC       0xcafebabe
@@ -58,20 +58,18 @@ In this example,
 
 - magic: cafebeba
 - nfat_arch: 2
-
-- fat_arch #0:
-        - cputype: 0x01000007 (CPU_TYPE_X86_64)
-        - cpusubtype: 0x3 (? might be CPU_SUBTYPE_ANY)
-        - offset: 0x4000
-        - size: 0x80f0
-        - align: 0xe
-
-- fat_arch #1:
-        - cputype: 0x0100000c (CPU_TYPE_ARM64)
-        - cpusubtype: 0x0 (CPU_SUBTYPE_LITTLE_ENDIAN)
-        - offset: 0x10000
-        - size: 0xc110
-        - align: 0xe
+- fat_arch #0
+    - cputype: 0x01000007 (CPU_TYPE_X86_64)
+    - cpusubtype: 0x3 (might be CPU_SUBTYPE_ANY)
+    - offset: 0x4000 (You can find the x86_64 binary object at 0x4000)
+    - size: 0x80f0
+    - align: 0xe
+- fat_arch #1
+    - cputype: 0x0100000c (CPU_TYPE_ARM64)
+    - cpusubtype: 0x0 (CPU_SUBTYPE_LITTLE_ENDIAN)
+    - offset: 0x10000 (You can find the AArch64 binary object at 0x10000)
+    - size: 0xc110
+    - align: 0xe
 
 # Appendix `cpu_type_t` and `cpu_subtype_t`
 
@@ -79,7 +77,7 @@ You can find the definition of cpu_type_t in `/usr/include/mach/machine.h`
 
 - `cpu_type_t`
 
-``` c
+```c
 /*
  * Capability bits used in the definition of cpu_type.
  */
@@ -125,7 +123,7 @@ You can find the definition of cpu_type_t in `/usr/include/mach/machine.h`
 
 - `cpu_subtype_t`
 
-```
+```c
 /*
  * Capability bits used in the definition of cpu_subtype.
  */
